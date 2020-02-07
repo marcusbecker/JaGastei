@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Já Gastei</string>
+    <string name="action_settings">Settings</string>
+    <string name="btn_gastar">Gastar!</string>
+    <string name="hint_valor">R$ 0,00</string>
+    <string name="hint_nota">Nota</string>
+    <string-array name="avisos_array">
+        <item>Poderia ter guardado...</item>
+        <item>Um sorvete teria sido mais barato...</item>
+        <item>Custo benefício muito baixo...</item>
+        <item>Até investir na poupança teria sido melhor...</item>
+    </string-array>
+</resources>
