@@ -9,17 +9,22 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.mbecker.jagastei.R;
+import br.com.mbecker.jagastei.Util;
 import br.com.mbecker.jagastei.db.GastoModel;
 
 public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> {
     private List<GastoModel> mDataset;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView mValor;
+        TextView mData;
+        TextView mDesc;
 
         ViewHolder(View v) {
             super(v);
-            textView = (TextView) v;
+            mValor = v.findViewById(R.id.tvValor);
+            mData = v.findViewById(R.id.tvData);
+            mDesc = v.findViewById(R.id.tvDesc);
         }
     }
 
@@ -29,7 +34,7 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.gasto_list_view, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.gasto_list_item, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -37,7 +42,9 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         GastoModel g = mDataset.get(position);
-        holder.textView.setText(String.valueOf(g.getValor()));
+        holder.mValor.setText(String.valueOf(g.getValor()));
+        holder.mData.setText(Util.frmData(g.getQuando()));
+        holder.mDesc.setText(g.getMesAno());
     }
 
     @Override

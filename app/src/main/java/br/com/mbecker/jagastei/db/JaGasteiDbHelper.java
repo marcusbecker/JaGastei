@@ -7,7 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Calendar;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
+
+import br.com.mbecker.jagastei.Util;
 
 public class JaGasteiDbHelper extends SQLiteOpenHelper {
 
@@ -57,6 +62,18 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.query(JaGasteiContract.GastoEntry.TABLE_NAME, null, null, null, null, null, null);
         return ModelBuilder.buildGastoLista(c);
+    }
+
+    public String totalMes() {
+        double res = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        String mesAno = Util.mesAno(Calendar.getInstance());
+        Cursor c = db.rawQuery(JaGasteiContract.SQL_TOTAL_MES, new String[]{mesAno});
+        if(c.moveToFirst()){
+            res = c.getDouble(0);
+        }
+
+        return Util.frmValor(res);
     }
 }
 

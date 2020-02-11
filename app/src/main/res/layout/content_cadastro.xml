@@ -9,22 +9,31 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:id="@+id/tvMes"
+    <EditText
+        android:id="@+id/etValor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tv_mes" />
+        android:hint="@string/hint_valor"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/etObs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_nota"
+        android:inputType="text"
+        android:maxLength="8" />
 
     <TextView
-        android:id="@+id/tvTotal"
+        android:id="@+id/tvAviso"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/gastos_view"
+    <Button
+        android:id="@+id/btGastar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
+        android:text="@string/btn_gastar" />
 
 </LinearLayout>

@@ -19,12 +19,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,15 +47,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        db = new JaGasteiDbHelper(MainActivity.this);
+
+        TextView total = findViewById(R.id.tvTotal);
+        total.setText(db.totalMes());
+        recyclerView = findViewById(R.id.gastos_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        /*
         TextView aviso = findViewById(R.id.tvAviso);
         String[] arr = getResources().getStringArray(R.array.avisos_array);
         aviso.setText(arr[new Random().nextInt(arr.length)]);
-
-        db = new JaGasteiDbHelper(MainActivity.this);
-
-        recyclerView = findViewById(R.id.my_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mValor = findViewById(R.id.etValor);
         mObs = findViewById(R.id.etObs);
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Calendar c = GregorianCalendar.getInstance();
-                String mesAno = (c.get(Calendar.MONTH) + 1) + "" + c.get(Calendar.YEAR);
+                String mesAno = Util.mesAno(c);
                 GastoModel g = new GastoModel();
                 g.setMesAno(mesAno);
                 g.setObs(mObs.getText().toString());
@@ -88,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 carregarLista();
             }
         });
+
+         */
     }
 
     @Override

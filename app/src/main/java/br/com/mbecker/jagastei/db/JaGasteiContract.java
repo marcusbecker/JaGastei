@@ -16,10 +16,13 @@ public class JaGasteiContract {
     public static final String PATH_GASTO = "gasto";
 
     protected static final String SQL_CREATE_GASTO =
-            "CREATE TABLE IF NOT EXISTS " + JaGasteiContract.GastoEntry.TABLE_NAME + " (" + JaGasteiContract.GastoEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_VALOR + REAL_TYPE  + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_QUANDO + INT_TYPE  + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_MESANO + TEXT_TYPE  + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_LAT + REAL_TYPE  + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_LNG + REAL_TYPE  + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_OBS + TEXT_TYPE  + " )";
+            "CREATE TABLE IF NOT EXISTS " + JaGasteiContract.GastoEntry.TABLE_NAME + " (" + JaGasteiContract.GastoEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_VALOR + REAL_TYPE + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_QUANDO + INT_TYPE + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_MESANO + TEXT_TYPE + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_LAT + REAL_TYPE + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_LNG + REAL_TYPE + COMMA_SEP + JaGasteiContract.GastoEntry.COLUMN_NAME_OBS + TEXT_TYPE + " )";
 
     protected static final String SQL_DELETE_GASTO =
             "DROP TABLE IF EXISTS " + JaGasteiContract.GastoEntry.TABLE_NAME;
+
+    protected static final String SQL_TOTAL_MES =
+            "SELECT SUM(" + JaGasteiContract.GastoEntry.COLUMN_NAME_VALOR + ") FROM " + JaGasteiContract.GastoEntry.TABLE_NAME + " WHERE " + JaGasteiContract.GastoEntry.COLUMN_NAME_MESANO + " = ?";
 
 
     public static class GastoEntry implements BaseColumns {
@@ -37,6 +40,7 @@ public class JaGasteiContract {
         public static final String COLUMN_NAME_LAT = "gasto_lat";
         public static final String COLUMN_NAME_LNG = "gasto_lng";
         public static final String COLUMN_NAME_OBS = "gasto_obs";
+
         public static Uri buildGastoUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
