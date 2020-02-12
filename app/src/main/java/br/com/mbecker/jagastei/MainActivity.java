@@ -1,5 +1,6 @@
 package br.com.mbecker.jagastei;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,12 +25,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText mValor;
-    private EditText mObs;
-    private Button btnGastar;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
     private JaGasteiDbHelper db;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +35,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        final Intent intentCadastro = new Intent(getBaseContext(), CadastroActivity.class);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                startActivity(intentCadastro);
             }
         });
 
@@ -54,47 +53,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.gastos_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        /*
-        TextView aviso = findViewById(R.id.tvAviso);
-        String[] arr = getResources().getStringArray(R.array.avisos_array);
-        aviso.setText(arr[new Random().nextInt(arr.length)]);
-
-        mValor = findViewById(R.id.etValor);
-        mObs = findViewById(R.id.etObs);
-        btnGastar = findViewById(R.id.btGastar);
-        btnGastar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Double valor = Double.valueOf(mValor.getText().toString());
-
-                if (valor == 0) {
-                    return;
-                }
-
-                Calendar c = GregorianCalendar.getInstance();
-                String mesAno = Util.mesAno(c);
-                GastoModel g = new GastoModel();
-                g.setMesAno(mesAno);
-                g.setObs(mObs.getText().toString());
-                g.setQuando(c.getTimeInMillis());
-                g.setValor(valor);
-
-                mObs.setText("");
-                mValor.setText("");
-
-                db.salvarGasto(g);
-                carregarLista();
-            }
-        });
-
-         */
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         carregarLista();
     }
 

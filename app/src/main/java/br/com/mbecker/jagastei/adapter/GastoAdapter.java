@@ -44,7 +44,7 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> 
         GastoModel g = mDataset.get(position);
         holder.mValor.setText(String.valueOf(g.getValor()));
         holder.mData.setText(Util.frmData(g.getQuando()));
-        holder.mDesc.setText(g.getMesAno());
+        holder.mDesc.setText(g.getObs());
     }
 
     @Override

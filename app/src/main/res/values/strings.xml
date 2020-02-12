@@ -11,4 +11,5 @@
         <item>Custo benefício muito baixo...</item>
         <item>Até investir na poupança teria sido melhor...</item>
     </string-array>
+    <string name="title_activity_cadastro">CadastroActivity</string>
 </resources>
