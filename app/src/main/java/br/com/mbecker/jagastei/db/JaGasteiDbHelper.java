@@ -58,18 +58,23 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<GastoModel> listarGasto() {
+    public List<GastoModel> listarGastos(String mesAno) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.query(JaGasteiContract.GastoEntry.TABLE_NAME, null, null, null, null, null, null);
+        Cursor c;
+        if (mesAno == null) {
+            c = db.query(JaGasteiContract.GastoEntry.TABLE_NAME, null, null, null, null, null, null);
+        } else {
+            c = db.query(JaGasteiContract.GastoEntry.TABLE_NAME, null, JaGasteiContract.GastoEntry.COLUMN_NAME_MESANO + "=?", new String[]{mesAno}, null, null, null, null);
+        }
+
         return ModelBuilder.buildGastoLista(c);
     }
 
-    public String totalMes() {
+    public String totalMes(String mesAno) {
         double res = 0;
         SQLiteDatabase db = getReadableDatabase();
-        String mesAno = Util.mesAno(Calendar.getInstance());
         Cursor c = db.rawQuery(JaGasteiContract.SQL_TOTAL_MES, new String[]{mesAno});
-        if(c.moveToFirst()){
+        if (c.moveToFirst()) {
             res = c.getDouble(0);
         }
 

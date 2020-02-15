@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,19 +24,17 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private JaGasteiDbHelper db;
-    private RecyclerView recyclerView;
+    private static final String ARG_PARAM_MES_SEL = "mesSel";
 
     private ViewPager pager;
-    private FAdapter fAdapter;
+    private ExtratoMesPagerAdapter extMesAdapter;
 
 
     @Override
@@ -57,62 +54,59 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fAdapter = new FAdapter(getSupportFragmentManager());
+        extMesAdapter = new ExtratoMesPagerAdapter(getSupportFragmentManager());
         pager = findViewById(R.id.pager);
-        pager.setAdapter(fAdapter);
-
-        db = new JaGasteiDbHelper(MainActivity.this);
+        pager.setAdapter(extMesAdapter);
     }
 
-    public class FAdapter extends FragmentStatePagerAdapter {
+    public static ExtratoMesFragment newInstance(short mesSel) {
+        ExtratoMesFragment fragment = new ExtratoMesFragment();
+        Bundle args = new Bundle();
+        args.putShort(ARG_PARAM_MES_SEL, mesSel);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
-        public FAdapter(FragmentManager fm) {
+    public class ExtratoMesPagerAdapter extends FragmentStatePagerAdapter {
+
+        private final short NUM_MESES = 5;
+
+        public ExtratoMesPagerAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return newInstance(position, "");
+            return MainActivity.newInstance((short) position);
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return NUM_MESES;
         }
 
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            return "teste " + position;
+            return "" + position;
         }
     }
 
-    public static DemoFragment newInstance(int param1, String param2) {
-        DemoFragment fragment = new DemoFragment();
-        Bundle args = new Bundle();
-        args.putInt("ARG_PARAM1", param1);
-        args.putString("ARG_PARAM2", param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-
-    public static class DemoFragment extends Fragment {
+    public static class ExtratoMesFragment extends Fragment {
+        private short mes;
         private JaGasteiDbHelper db;
         private RecyclerView recyclerView;
-        private int mes;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             if (getArguments() != null) {
-                mes = getArguments().getInt("ARG_PARAM1");
-                //mParam2 = getArguments().getString(ARG_PARAM2);
+                db = new JaGasteiDbHelper(getContext());
+                mes = getArguments().getShort(ARG_PARAM_MES_SEL);
             }
-
         }
-
 
         @Nullable
         @Override
@@ -123,58 +117,43 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            db = new JaGasteiDbHelper(view.getContext());
+            //TODO mes atual e 5 meses para trás
 
             String mesAtual;
-            switch (mes) {
-                case 0:
-                    mesAtual = getString(R.string.mes_atual);
-                    break;
-                case 1:
-                    mesAtual = getString(R.string.mes_jan);
-                    break;
-                case 2:
-                    mesAtual = getString(R.string.mes_fev);
-                    break;
-                case 3:
-                    mesAtual = getString(R.string.mes_mar);
-                    break;
-                case 4:
-                    mesAtual = getString(R.string.mes_abr);
-                    break;
-                default:
-                    mesAtual = "88888";
-            }
+            Calendar c = Util.ajustarMes(mes);
+            mesAtual = legendaMes(c) + " - " + c.get(Calendar.YEAR);
+
+            String mesAno = Util.mesAno(c);
+            List<GastoModel> lst = db.listarGastos(mesAno);
 
             TextView mes = view.findViewById(R.id.tvMes);
             TextView total = view.findViewById(R.id.tvTotal);
 
             mes.setText(mesAtual);
-            total.setText(db.totalMes());
+            total.setText(Util.somarGastos(lst));
 
             recyclerView = view.findViewById(R.id.gastos_view);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-            recyclerView.setAdapter(new GastoAdapter(db.listarGasto()));
+            recyclerView.setAdapter(new GastoAdapter(lst));
+        }
+
+        private String legendaMes(Calendar c) {
+            String mesAtual;
+            if (mes == 0) {
+                mesAtual = getString(R.string.mes_atual);
+            } else {
+                mesAtual = getResources().getStringArray(R.array.meses_array)[c.get(Calendar.MONTH)];
+            }
+
+            return mesAtual;
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //carregarLista();
-    }
-
-    private void carregarLista() {
-        final List<GastoModel> lst = db.listarGasto();
-
-        GastoAdapter mAdapter = new GastoAdapter(lst);
-        recyclerView.setAdapter(mAdapter);
-
-        for (GastoModel g : lst) {
-            //Log.i(getClass().getName(), g.toString());
-        }
     }
 
     @Override
