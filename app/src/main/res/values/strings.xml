@@ -12,4 +12,12 @@
         <item>Até investir na poupança teria sido melhor...</item>
     </string-array>
     <string name="title_activity_cadastro">CadastroActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mes_atual">Este mês</string>
+    <string name="mes_jan">Janeiro</string>
+    <string name="mes_fev">Fevereiro</string>
+    <string name="mes_mar">Março</string>
+    <string name="mes_abr">Abril</string>
 </resources>
