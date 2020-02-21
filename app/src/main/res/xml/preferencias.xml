@@ -1,0 +1,10 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        app:key="@string/pref_key_frases_gastos"
+        app:summary="@string/not_sum_frases_gastos"
+        app:title="@string/not_tit_frases_gastos" />
+
+</PreferenceScreen>

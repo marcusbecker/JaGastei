@@ -30,6 +30,11 @@
         android:tint="@color/colorAccentText"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <FrameLayout
+        android:id="@+id/frame_config"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <include layout="@layout/content_main" />
 
 

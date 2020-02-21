@@ -1,7 +1,9 @@
 package br.com.mbecker.jagastei;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,9 +38,16 @@ public class CadastroActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean exibirFrases = pref.getBoolean(getResources().getString(R.string.pref_key_frases_gastos), true);
+
         TextView aviso = findViewById(R.id.tvAviso);
-        String[] arr = getResources().getStringArray(R.array.avisos_array);
-        aviso.setText('"' + arr[new Random().nextInt(arr.length)] + '"');
+        if (exibirFrases) {
+            String[] arr = getResources().getStringArray(R.array.avisos_array);
+            aviso.setText('"' + arr[new Random().nextInt(arr.length)] + '"');
+        } else {
+            aviso.setVisibility(View.INVISIBLE);
+        }
 
         db = new JaGasteiDbHelper(CadastroActivity.this);
 
