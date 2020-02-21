@@ -16,18 +16,25 @@
             android:id="@+id/tvMes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="24dp"
+            android:textAlignment="center"
+
             android:text="@string/tv_mes" />
 
         <TextView
             android:id="@+id/tvTotal"
+            android:textSize="28dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="300,00" />
+            android:textAlignment="center"
+            android:text="R$ 300,00" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gastos_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:scrollbars="vertical" />
 
     </LinearLayout>

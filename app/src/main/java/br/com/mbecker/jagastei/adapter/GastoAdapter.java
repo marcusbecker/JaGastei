@@ -42,7 +42,7 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         GastoModel g = mDataset.get(position);
-        holder.mValor.setText(String.valueOf(g.getValor()));
+        holder.mValor.setText(Util.frmValor(g.getValor()));
         holder.mData.setText(Util.frmData(g.getQuando()));
         holder.mDesc.setText(g.getObs());
     }

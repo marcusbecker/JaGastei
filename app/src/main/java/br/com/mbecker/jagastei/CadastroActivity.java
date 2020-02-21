@@ -7,6 +7,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
@@ -15,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
+import br.com.mbecker.jagastei.util.MoneyTextWatcher;
 
 
 public class CadastroActivity extends AppCompatActivity {
@@ -33,19 +38,23 @@ public class CadastroActivity extends AppCompatActivity {
 
         TextView aviso = findViewById(R.id.tvAviso);
         String[] arr = getResources().getStringArray(R.array.avisos_array);
-        aviso.setText(arr[new Random().nextInt(arr.length)]);
+        aviso.setText('"' + arr[new Random().nextInt(arr.length)] + '"');
 
         db = new JaGasteiDbHelper(CadastroActivity.this);
 
         mValor = findViewById(R.id.etValor);
         mObs = findViewById(R.id.etObs);
         btnGastar = findViewById(R.id.btGastar);
+
+        mValor.addTextChangedListener(new MoneyTextWatcher(mValor, NumberFormat.getCurrencyInstance()));
         btnGastar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Double valor = Double.valueOf(mValor.getText().toString());
+                BigDecimal parsed = Util.toBigDecimal(Util.somenteNumeros(mValor.getText().toString()));
+                double valor = parsed.doubleValue();
 
-                if (valor == 0) {
+                if (valor == 0.0) {
+                    Snackbar.make(view, R.string.erro_valor, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     return;
                 }
 

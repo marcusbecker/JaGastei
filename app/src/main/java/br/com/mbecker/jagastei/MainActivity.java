@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 startActivity(intentCadastro);
             }
         });
@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         extMesAdapter = new ExtratoMesPagerAdapter(getSupportFragmentManager());
         pager = findViewById(R.id.pager);
         pager.setAdapter(extMesAdapter);
+
+        Util.sdf = new SimpleDateFormat(getString(R.string.frm_mes_lista));
     }
 
     public static ExtratoMesFragment newInstance(short mesSel) {
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_blank, container, false);
+            return inflater.inflate(R.layout.fragment_valor_mes, container, false);
         }
 
         @Override
@@ -121,7 +123,12 @@ public class MainActivity extends AppCompatActivity {
 
             String mesAtual;
             Calendar c = Util.ajustarMes(mes);
-            mesAtual = legendaMes(c) + " - " + c.get(Calendar.YEAR);
+            int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
+
+            mesAtual = legendaMes(c);
+            if (c.get(Calendar.YEAR) != anoAtual) {
+                mesAtual += " (" + c.get(Calendar.YEAR) + ")";
+            }
 
             String mesAno = Util.mesAno(c);
             List<GastoModel> lst = db.listarGastos(mesAno);

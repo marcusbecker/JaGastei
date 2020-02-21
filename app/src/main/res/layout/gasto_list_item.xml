@@ -3,32 +3,45 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginBottom="4dp"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:padding="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="6dp"
         android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvValor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:text="R$ 300,00" />
 
         <TextView
             android:id="@+id/tvData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:orientation="vertical"
-            android:text="11/02/2020" />
+            android:text="11/02"
+            android:textColor="@color/colorAccentText" />
+
+        <TextView
+            android:id="@+id/tvValor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:text="R$ 300,00"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorAccentText"
+            android:textSize="18dp" />
+
     </LinearLayout>
 
     <TextView
         android:id="@+id/tvDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="gasto nada" />
+        android:layout_margin="6dp"
+        android:text="gasto nada"
+        android:textColor="@color/colorAccentText" />
 
 </LinearLayout>
