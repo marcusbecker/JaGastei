@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginHorizontal="6dp"
         android:layout_marginTop="10dp"
-        android:autofillHints="R$0,00"
+        android:autofillHints="@string/hint_valor"
         android:hint="@string/hint_valor"
         android:inputType="numberDecimal"
         android:textAlignment="textEnd"
