@@ -3,6 +3,8 @@ package br.com.mbecker.jagastei.db;
 import java.util.Date;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+
 public class GastoModel {
     private long id;
     private double valor;
@@ -81,6 +83,7 @@ public class GastoModel {
         return Objects.hash(id);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "GastoModel{" +

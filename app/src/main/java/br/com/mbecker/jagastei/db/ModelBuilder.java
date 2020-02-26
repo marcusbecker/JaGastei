@@ -5,7 +5,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelBuilder {
+class ModelBuilder {
 
     private static GastoModel convertGastoModel(Cursor query) {
         GastoModel v = new GastoModel();

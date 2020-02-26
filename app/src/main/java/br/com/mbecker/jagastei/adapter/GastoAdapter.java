@@ -7,18 +7,19 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.mbecker.jagastei.R;
 import br.com.mbecker.jagastei.Util;
 import br.com.mbecker.jagastei.db.GastoModel;
 
 public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> {
-    private List<GastoModel> mDataset;
+    private final List<GastoModel> mDataset;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mValor;
-        TextView mData;
-        TextView mDesc;
+        final TextView mValor;
+        final TextView mData;
+        final TextView mDesc;
 
         ViewHolder(View v) {
             super(v);
@@ -32,11 +33,11 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> 
         mDataset = myDataset;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.gasto_list_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override

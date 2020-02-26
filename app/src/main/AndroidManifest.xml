@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".PreferenciaActivity"
-            android:label="@string/title_activity_preferencia"></activity>
+            android:label="@string/title_activity_preferencia" />
         <activity
             android:name=".CadastroActivity"
             android:label="@string/title_activity_cadastro"

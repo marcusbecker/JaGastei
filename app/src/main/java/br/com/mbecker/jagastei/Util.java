@@ -3,17 +3,14 @@ package br.com.mbecker.jagastei;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import br.com.mbecker.jagastei.db.GastoModel;
 
 public class Util {
-    public static int scale = 2;
+    private static final int scale = 2;
     private static final BigDecimal divisor = new BigDecimal(100);
     public static DateFormat sdf;
 
@@ -50,11 +47,13 @@ public class Util {
     }
 
     public static String somenteNumeros(String s) {
+        final String charNumeros = "0123456789";
         StringBuilder sb = new StringBuilder(s);
-        String charNumeros = "0123456789";
-        for (int i = 0; i < sb.length(); ++i) {
+        for (int i = 0; i < sb.length(); ) {
             if (!charNumeros.contains(String.valueOf(sb.charAt(i)))) {
                 sb.delete(i, i + 1);
+            } else {
+                ++i;
             }
         }
 

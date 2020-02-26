@@ -29,14 +29,12 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String ARG_PARAM_MES_SEL = "mesSel";
-
-    private ViewPager pager;
-    private ExtratoMesPagerAdapter extMesAdapter;
-
+    private static final short NUM_MESES = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +52,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        extMesAdapter = new ExtratoMesPagerAdapter(getSupportFragmentManager());
-        pager = findViewById(R.id.pager);
+        ExtratoMesPagerAdapter extMesAdapter = new ExtratoMesPagerAdapter(getSupportFragmentManager());
+        ViewPager pager = findViewById(R.id.pager);
         pager.setAdapter(extMesAdapter);
 
-        Util.sdf = new SimpleDateFormat(getString(R.string.frm_mes_lista));
+        Util.sdf = new SimpleDateFormat(getString(R.string.frm_mes_lista), Locale.getDefault());
     }
 
-    public static ExtratoMesFragment newInstance(short mesSel) {
+    private static ExtratoMesFragment newInstance(short mesSel) {
         ExtratoMesFragment fragment = new ExtratoMesFragment();
         Bundle args = new Bundle();
         args.putShort(ARG_PARAM_MES_SEL, mesSel);
@@ -69,11 +67,9 @@ public class MainActivity extends AppCompatActivity {
         return fragment;
     }
 
-    public class ExtratoMesPagerAdapter extends FragmentStatePagerAdapter {
+    class ExtratoMesPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final short NUM_MESES = 5;
-
-        public ExtratoMesPagerAdapter(FragmentManager fm) {
+        ExtratoMesPagerAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
@@ -96,10 +92,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @SuppressWarnings("WeakerAccess")
     public static class ExtratoMesFragment extends Fragment {
         private short mes;
         private JaGasteiDbHelper db;
-        private RecyclerView recyclerView;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -119,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            //TODO mes atual e 5 meses para trás
 
             String mesAtual;
             Calendar c = Util.ajustarMes(mes);
@@ -139,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             mes.setText(mesAtual);
             total.setText(Util.somarGastos(lst));
 
-            recyclerView = view.findViewById(R.id.gastos_view);
+            RecyclerView recyclerView = view.findViewById(R.id.gastos_view);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -156,11 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
             return mesAtual;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

@@ -7,12 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.Calendar;
-import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
-
-import br.com.mbecker.jagastei.Util;
 
 public class JaGasteiDbHelper extends SQLiteOpenHelper {
 
@@ -37,9 +32,8 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
     }
 
     public void salvarGasto(GastoModel g) {
-        SQLiteDatabase db = getWritableDatabase();
 
-        try {
+        try (SQLiteDatabase db = getWritableDatabase()) {
             ContentValues values = new ContentValues();
 
             values.put(JaGasteiContract.GastoEntry.COLUMN_NAME_VALOR, g.getValor());
@@ -53,8 +47,6 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
 
         } catch (Exception e) {
             Log.d(getClass().getName(), "salvarGasto: " + e.getMessage());
-        } finally {
-            db.close();
         }
     }
 
@@ -70,6 +62,7 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
         return ModelBuilder.buildGastoLista(c);
     }
 
+    /*
     public String totalMes(String mesAno) {
         double res = 0;
         SQLiteDatabase db = getReadableDatabase();
@@ -78,8 +71,10 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
             res = c.getDouble(0);
         }
 
+        c.close();
         return Util.frmValor(res);
     }
+     */
 }
 
 

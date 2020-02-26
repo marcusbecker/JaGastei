@@ -32,7 +32,7 @@
             android:text="R$ 300,00"
             android:textAlignment="textEnd"
             android:textColor="@color/colorAccentText"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 

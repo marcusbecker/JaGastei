@@ -28,7 +28,6 @@ public class CadastroActivity extends AppCompatActivity {
 
     private EditText mValor;
     private EditText mObs;
-    private Button btnGastar;
     private JaGasteiDbHelper db;
 
     @Override
@@ -53,7 +52,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         mValor = findViewById(R.id.etValor);
         mObs = findViewById(R.id.etObs);
-        btnGastar = findViewById(R.id.btGastar);
+        Button btnGastar = findViewById(R.id.btGastar);
 
         mValor.addTextChangedListener(new MoneyTextWatcher(mValor, NumberFormat.getCurrencyInstance()));
         btnGastar.setOnClickListener(new View.OnClickListener() {
