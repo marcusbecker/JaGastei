@@ -1,5 +1,9 @@
 package br.com.mbecker.jagastei;
 
+import android.accessibilityservice.AccessibilityService;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,6 +23,7 @@ import br.com.mbecker.jagastei.adapter.GastoAdapter;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
 
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -57,6 +62,31 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(extMesAdapter);
 
         Util.sdf = new SimpleDateFormat(getString(R.string.frm_mes_lista), Locale.getDefault());
+
+        Context context = getApplicationContext();
+
+        /*
+        alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        60 * 1000, alarmIntent);
+        */
+
+        final Intent alrmIntent = new Intent(context, AlarmBroadcastReceiver.class);
+        boolean noAlarm = PendingIntent.getBroadcast(MainActivity.this, AlarmBroadcastReceiver.REQUEST_CODE, alrmIntent, PendingIntent.FLAG_NO_CREATE) == null;
+        if (noAlarm) {
+            AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, AlarmBroadcastReceiver.REQUEST_CODE, alrmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(System.currentTimeMillis());
+            c.set(Calendar.HOUR_OF_DAY, 9);
+            alarmMgr.setInexactRepeating(AlarmManager.RTC,
+                    c.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 
     private static ExtratoMesFragment newInstance(short mesSel) {

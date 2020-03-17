@@ -34,7 +34,8 @@ public class PreferenciaActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static class SettingsFragment extends PreferenceFragmentCompat {
+    @SuppressWarnings("WeakerAccess")
+    public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.preferencias, rootKey);

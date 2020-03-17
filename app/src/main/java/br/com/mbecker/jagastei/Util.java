@@ -33,8 +33,7 @@ public class Util {
 
     public static Calendar ajustarMes(short mes) {
         Calendar c = Calendar.getInstance();
-        int t = c.get(Calendar.MONTH) - mes - 1;
-        c.add(Calendar.MONTH, t);
+        c.add(Calendar.MONTH, -mes);
         return c;
     }
 
