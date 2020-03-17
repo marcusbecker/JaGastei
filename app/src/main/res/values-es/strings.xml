@@ -34,8 +34,8 @@
     <string name="not_tit_frases_gastos">Exibir frases aleatórias</string>
     <string name="not_sum_frases_gastos">Exibir frases aleatórias ao registrar gastos</string>
     <string name="title_activity_preferencia">Configurar</string>
-    <string name="notfication_msg_a">Total gasto do mês passado: </string>
-    <string name="notfication_msg_b">Total gasto até agora: </string>
+    <string name="notfication_msg_a">Total gasto do mês passado:&#160;</string>
+    <string name="notfication_msg_b">Total gasto até agora:&#160;</string>
     <string name="notfication_title">Gastos até agora</string>
 
 

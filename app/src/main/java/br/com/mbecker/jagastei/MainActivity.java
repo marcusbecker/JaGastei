@@ -65,16 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         Context context = getApplicationContext();
 
-        /*
-        alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        60 * 1000, alarmIntent);
-        */
-
         final Intent alrmIntent = new Intent(context, AlarmBroadcastReceiver.class);
         boolean noAlarm = PendingIntent.getBroadcast(MainActivity.this, AlarmBroadcastReceiver.REQUEST_CODE, alrmIntent, PendingIntent.FLAG_NO_CREATE) == null;
         if (noAlarm) {

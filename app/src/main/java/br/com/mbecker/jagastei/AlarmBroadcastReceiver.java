@@ -50,9 +50,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             texto += gastos;
 
             PendingIntent p = PendingIntent.getActivity(context, AlarmBroadcastReceiver.NOTIFICATION_REQUEST_CODE, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Builder b = new NotificationCompat.Builder(context, "");
+            NotificationCompat.Builder b = new NotificationCompat.Builder(context, "NO_ID");
             b.setDefaults(Notification.DEFAULT_ALL)
-                    .setSmallIcon(android.R.drawable.ic_notification_clear_all)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle(context.getString(R.string.notfication_title))
                     .setContentText(texto)
                     .setContentIntent(p)
