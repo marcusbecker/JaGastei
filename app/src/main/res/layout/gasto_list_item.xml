@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="6dp"
     android:layout_marginBottom="4dp"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     android:padding="6dp">
 
@@ -22,7 +22,7 @@
             android:layout_marginEnd="10dp"
             android:orientation="vertical"
             android:text="11/02"
-            android:textColor="@color/colorAccentText" />
+            android:textColor="@color/colorBlack" />
 
         <TextView
             android:id="@+id/tvValor"
@@ -31,17 +31,29 @@
             android:orientation="vertical"
             android:text="R$ 300,00"
             android:textAlignment="textEnd"
-            android:textColor="@color/colorAccentText"
+            android:textColor="@color/colorBlack"
             android:textSize="18sp" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvDesc"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/llDesc"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
-        android:text="gasto nada"
-        android:textColor="@color/colorAccentText" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tvDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:background="@color/colorLight"
+            android:padding="6dp"
+            android:text="gasto"
+            android:textColor="@color/colorBlack" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -38,5 +38,6 @@
     <string name="notfication_msg_a">Total gasto do mês passado:&#160;</string>
     <string name="notfication_msg_b">Total gasto até agora:&#160;</string>
     <string name="notfication_title">Gastos até agora</string>
+    <string name="line">_ _ _</string>
 
 </resources>

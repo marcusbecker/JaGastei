@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class JaGasteiDbHelper extends SQLiteOpenHelper {
@@ -51,7 +52,7 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
                     continue;
                 }
 
-                obs = obs.replaceAll(";", ",").replaceAll(" ", ";");
+                obs = obs.replaceAll(";", ",").replaceAll(" ", ";").toLowerCase();
                 ContentValues cv = new ContentValues();
                 cv.put(JaGasteiContract.GastoEntry.COLUMN_NAME_OBS, obs);
                 db.update(JaGasteiContract.GastoEntry.TABLE_NAME, cv, "_id = ?", new String[]{String.valueOf(id)});
