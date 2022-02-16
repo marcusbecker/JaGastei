@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import br.com.mbecker.jagastei.R;
-import br.com.mbecker.jagastei.Util;
+import br.com.mbecker.jagastei.util.Util;
 import br.com.mbecker.jagastei.db.GastoModel;
 
 public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> {

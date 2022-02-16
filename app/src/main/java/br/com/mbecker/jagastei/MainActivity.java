@@ -1,6 +1,5 @@
 package br.com.mbecker.jagastei;
 
-import android.accessibilityservice.AccessibilityService;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -22,8 +21,8 @@ import androidx.viewpager.widget.ViewPager;
 import br.com.mbecker.jagastei.adapter.GastoAdapter;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
+import br.com.mbecker.jagastei.util.Util;
 
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;

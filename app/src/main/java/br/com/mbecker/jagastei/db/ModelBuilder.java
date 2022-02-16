@@ -7,16 +7,23 @@ import java.util.List;
 
 class ModelBuilder {
 
-    private static GastoModel convertGastoModel(Cursor query) {
+    private static GastoModel convertGastoModel(Cursor c) {
         GastoModel v = new GastoModel();
-        v.setId(query.getLong(query.getColumnIndex(JaGasteiContract.GastoEntry._ID)));
-        v.setValor(query.getDouble(query.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_VALOR)));
-        v.setQuando(query.getLong(query.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_QUANDO)));
-        v.setMesAno(query.getString(query.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_MESANO)));
-        v.setLat(query.getDouble(query.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_LAT)));
-        v.setLng(query.getDouble(query.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_LNG)));
-        v.setObs(query.getString(query.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_OBS)));
+        v.setId(c.getLong(c.getColumnIndex(JaGasteiContract.GastoEntry._ID)));
+        v.setValor(c.getDouble(c.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_VALOR)));
+        v.setQuando(c.getLong(c.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_QUANDO)));
+        v.setMesAno(c.getString(c.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_MESANO)));
+        v.setLat(c.getDouble(c.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_LAT)));
+        v.setLng(c.getDouble(c.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_LNG)));
+        v.setObs(c.getString(c.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_OBS)));
         return v;
+    }
+
+    private static TagModel convertTagModel(Cursor c) {
+        long id = c.getLong(c.getColumnIndex(JaGasteiContract.TagEntry._ID));
+        String tag = c.getString(c.getColumnIndex(JaGasteiContract.TagEntry.COLUMN_NAME_TAG_NAME));
+        String gastos = c.getString(c.getColumnIndex(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO));
+        return new TagModel(id, tag, gastos);
     }
 
     public static GastoModel buildGasto(Cursor query) {
@@ -29,17 +36,31 @@ class ModelBuilder {
         return null;
     }
 
-    public static List<GastoModel> buildGastoLista(Cursor query) {
+    public static List<GastoModel> buildGastoLista(Cursor c) {
         List<GastoModel> lst = new ArrayList<>(40);
 
-        if (query.moveToFirst()) {
+        if (c.moveToFirst()) {
             do {
-                lst.add(convertGastoModel(query));
-            } while (query.moveToNext());
+                lst.add(convertGastoModel(c));
+            } while (c.moveToNext());
 
-            query.close();
+            c.close();
         }
 
         return lst;
     }
+
+    public static List<TagModel> buildTagLista(Cursor c) {
+        List<TagModel> lst = new ArrayList<>(40);
+        if (c.moveToFirst()) {
+            do {
+                lst.add(convertTagModel(c));
+            } while (c.moveToNext());
+
+            c.close();
+        }
+
+        return lst;
+    }
+
 }

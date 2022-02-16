@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -15,19 +16,25 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
 import br.com.mbecker.jagastei.util.MoneyTextWatcher;
+import br.com.mbecker.jagastei.util.TagTextWatcher;
+import br.com.mbecker.jagastei.util.TagUtil;
+import br.com.mbecker.jagastei.util.Util;
 
 
 public class CadastroActivity extends AppCompatActivity {
 
     private EditText mValor;
     private EditText mObs;
+    private LinearLayout mTagResult;
     private JaGasteiDbHelper db;
 
     @Override
@@ -43,18 +50,25 @@ public class CadastroActivity extends AppCompatActivity {
         TextView aviso = findViewById(R.id.tvAviso);
         if (exibirFrases) {
             String[] arr = getResources().getStringArray(R.array.avisos_array);
-            aviso.setText('"' + arr[new Random().nextInt(arr.length)] + '"');
+            aviso.setText(String.format("\"%s\"", arr[new Random().nextInt(arr.length)]));
         } else {
             aviso.setVisibility(View.INVISIBLE);
         }
 
         db = new JaGasteiDbHelper(CadastroActivity.this);
 
-        mValor = findViewById(R.id.etValor);
-        mObs = findViewById(R.id.etObs);
-        Button btnGastar = findViewById(R.id.btGastar);
+        //List<TagModel> tagModels = db.listarTags();
 
+        mObs = findViewById(R.id.etObs);
+        mValor = findViewById(R.id.etValor);
+        mTagResult = findViewById(R.id.llTags);
+
+        TagTextWatcher tagWatcher = new TagTextWatcher(mObs, mTagResult);
+        mObs.addTextChangedListener(tagWatcher);
+        mValor.requestFocus();
         mValor.addTextChangedListener(new MoneyTextWatcher(mValor, NumberFormat.getCurrencyInstance()));
+
+        Button btnGastar = findViewById(R.id.btGastar);
         btnGastar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,15 +83,22 @@ public class CadastroActivity extends AppCompatActivity {
                 Calendar c = GregorianCalendar.getInstance();
                 String mesAno = Util.mesAno(c);
                 GastoModel g = new GastoModel();
+
+                List<String> tags = tagWatcher.getTags();
+                if (tags.isEmpty()) {
+                    tags.add(mObs.getText().toString());
+                }
+
                 g.setMesAno(mesAno);
-                g.setObs(mObs.getText().toString());
+                g.setObs(TagUtil.tagsToString(tags));
                 g.setQuando(c.getTimeInMillis());
                 g.setValor(valor);
 
                 mObs.setText("");
                 mValor.setText("");
 
-                db.salvarGasto(g);
+                long id = db.salvarGasto(g);
+                db.atualizaTags(id, tags);
                 carregarLista();
             }
         });

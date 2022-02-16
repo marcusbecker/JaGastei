@@ -9,7 +9,6 @@ import android.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class JaGasteiDbHelper extends SQLiteOpenHelper {
@@ -23,18 +22,27 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(JaGasteiContract.SQL_CREATE_GASTO);
+        db.execSQL(JaGasteiContract.SQL_CREATE_TAG);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         switch (newVersion) {
-            case 0:
-                db.execSQL(JaGasteiContract.SQL_DELETE_GASTO);
-                onCreate(db);
-                break;
             case 2:
                 db.execSQL(JaGasteiContract.SQL_CREATE_TAG);
                 migrarVersao2(db);
+                break;
+        }
+
+    }
+
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch (oldVersion) {
+            case 1:
+                db.execSQL(JaGasteiContract.SQL_DELETE_GASTO);
+                break;
+            case 2:
+                db.execSQL(JaGasteiContract.SQL_DELETE_TAG);
                 break;
         }
 
@@ -79,13 +87,9 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion == 2) {
-            db.execSQL(JaGasteiContract.SQL_DELETE_TAG);
-        }
-    }
 
-    public void salvarGasto(GastoModel g) {
+    public long salvarGasto(GastoModel g) {
+        long id = 0;
 
         try (SQLiteDatabase db = getWritableDatabase()) {
             ContentValues values = new ContentValues();
@@ -97,11 +101,13 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
             values.put(JaGasteiContract.GastoEntry.COLUMN_NAME_LNG, g.getLng());
             values.put(JaGasteiContract.GastoEntry.COLUMN_NAME_OBS, g.getObs());
 
-            db.insert(JaGasteiContract.GastoEntry.TABLE_NAME, null, values);
+            id = db.insert(JaGasteiContract.GastoEntry.TABLE_NAME, null, values);
 
         } catch (Exception e) {
             Log.d(getClass().getName(), "salvarGasto: " + e.getMessage());
         }
+
+        return id;
     }
 
     public List<GastoModel> listarGastos(String mesAno) {
@@ -114,6 +120,16 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
         }
 
         return ModelBuilder.buildGastoLista(c);
+    }
+
+    public List<TagModel> listarTags() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.query(JaGasteiContract.TagEntry.TABLE_NAME, null, null, null, null, null, null);
+        return ModelBuilder.buildTagLista(c);
+    }
+
+    public void atualizaTags(long id, List<String> tags) {
+
     }
 
     /*
