@@ -22,6 +22,8 @@ import java.util.Random;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import br.com.mbecker.jagastei.adapter.CreateTag;
+import br.com.mbecker.jagastei.adapter.TextViewHelper;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
 import br.com.mbecker.jagastei.util.MoneyTextWatcher;
@@ -63,8 +65,19 @@ public class CadastroActivity extends AppCompatActivity {
         mValor = findViewById(R.id.etValor);
         mTagResult = findViewById(R.id.llTags);
 
+        TextViewHelper helper = new TextViewHelper(this);
         TagTextWatcher tagWatcher = new TagTextWatcher(mObs, mTagResult);
+
+        tagWatcher.onCreateTag(new CreateTag() {
+            @Override
+            public View createTag(String tag) {
+                return helper.build(tag);
+            }
+        });
+
+
         mObs.addTextChangedListener(tagWatcher);
+
         mValor.requestFocus();
         mValor.addTextChangedListener(new MoneyTextWatcher(mValor, NumberFormat.getCurrencyInstance()));
 

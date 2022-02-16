@@ -10,10 +10,14 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.mbecker.jagastei.adapter.CreateTag;
+
 public class TagTextWatcher implements TextWatcher {
     private final List<String> tags;
     private final WeakReference<EditText> editTextWeakReference;
     private final WeakReference<LinearLayout> resultWeakReference;
+
+    private CreateTag tagCreate;
 
     public TagTextWatcher(EditText editText, LinearLayout result) {
         this.tags = new ArrayList<>(5);
@@ -23,7 +27,6 @@ public class TagTextWatcher implements TextWatcher {
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
     }
 
     @Override
@@ -41,11 +44,22 @@ public class TagTextWatcher implements TextWatcher {
             String value = text.toLowerCase().trim();
             tags.add(value);
 
-            TextView tv = new TextView(editText.getContext());
-            tv.setText(value);
+            TextView tv;
+
+            if (tagCreate == null) {
+                tv = new TextView(editText.getContext());
+                tv.setText(value);
+            } else {
+                tv = (TextView) tagCreate.createTag(value);
+            }
+
             resultWeakReference.get().addView(tv);
             editText.addTextChangedListener(this);
         }
+    }
+
+    public void onCreateTag(CreateTag tag) {
+        this.tagCreate = tag;
     }
 
     public List<String> getTags() {
