@@ -67,14 +67,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         TextViewHelper helper = new TextViewHelper(this);
         TagTextWatcher tagWatcher = new TagTextWatcher(mObs, mTagResult);
-
-        tagWatcher.onCreateTag(new CreateTag() {
-            @Override
-            public View createTag(String tag) {
-                return helper.build(tag);
-            }
-        });
-
+        tagWatcher.onCreateTag((tag) -> helper.build(tag));
 
         mObs.addTextChangedListener(tagWatcher);
 
