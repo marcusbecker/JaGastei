@@ -7,9 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.jar.JarEntry;
+
+import br.com.mbecker.jagastei.util.TagUtil;
 
 public class JaGasteiDbHelper extends SQLiteOpenHelper {
 
@@ -129,7 +135,30 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
     }
 
     public void atualizaTags(long id, List<String> tags) {
+        Cursor c;
+        SQLiteDatabase db = getWritableDatabase();
+        for (String t : tags) {
+            c = db.query(JaGasteiContract.TagEntry.TABLE_NAME, null, JaGasteiContract.TagEntry.COLUMN_NAME_TAG_NAME + "=?", new String[]{t}, null, null, null, "1");
+            if (c.moveToFirst()) {
+                TagModel tagModel = ModelBuilder.buildTag(c);
+                Set<Long> newTags = new HashSet<>(Arrays.asList(tagModel.getGastos()));
+                newTags.add(id);
+                if (newTags.size() > tagModel.getGastos().length) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO, TagUtil.tagsGastosToString(newTags));
+                    db.update(JaGasteiContract.TagEntry.TABLE_NAME, cv, JaGasteiContract.TagEntry._ID + "=?", new String[]{String.valueOf(tagModel.getId())});
+                }
 
+                c.close();
+
+            } else {
+                ContentValues cv = new ContentValues();
+                cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_TAG_NAME, t);
+                cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO, String.valueOf(id));
+                db.insert(JaGasteiContract.TagEntry.TABLE_NAME, null, cv);
+            }
+
+        }
     }
 
     /*

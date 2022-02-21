@@ -63,4 +63,7 @@ class ModelBuilder {
         return lst;
     }
 
+    public static TagModel buildTag(Cursor c) {
+        return convertTagModel(c);
+    }
 }

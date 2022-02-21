@@ -59,8 +59,9 @@ public class TagTextWatcher implements TextWatcher {
     }
 
     private boolean addUniqueTag(String tag) {
-        for (String s : tags) {
-            if (s.equalsIgnoreCase(tag)) {
+        for (int i = 0; i < tags.size(); ++i) {
+            if (tag.equalsIgnoreCase(tags.get(i))) {
+                tags.set(i, tag);
                 return false;
             }
         }
@@ -69,7 +70,7 @@ public class TagTextWatcher implements TextWatcher {
         return true;
     }
 
-    public void onCreateTag(CreateTag tag) {
+    public void setOnCreateTag(CreateTag tag) {
         this.tagCreate = tag;
     }
 

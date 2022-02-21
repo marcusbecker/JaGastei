@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
 import br.com.mbecker.jagastei.adapter.GastoAdapter;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
@@ -84,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
         args.putShort(ARG_PARAM_MES_SEL, mesSel);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void listTags(View view) {
+        startActivity(new Intent(this, TagActivity.class));
     }
 
     class ExtratoMesPagerAdapter extends FragmentStatePagerAdapter {

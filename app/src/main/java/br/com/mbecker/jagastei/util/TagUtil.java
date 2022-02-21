@@ -3,12 +3,13 @@ package br.com.mbecker.jagastei.util;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class TagUtil {
     private static final String DELIMITER = ";";
 
-    public static String tagsToString(List<String> tags) {
+    public static String tagsToString(Collection<String> tags) {
         StringBuilder sb = new StringBuilder();
         for (String s : tags) {
             if (sb.length() != 0) {
@@ -16,6 +17,18 @@ public class TagUtil {
             }
 
             sb.append(limpaTag(s));
+        }
+        return sb.toString();
+    }
+
+    public static String tagsGastosToString(Collection<Long> tags) {
+        StringBuilder sb = new StringBuilder();
+        for (Long id : tags) {
+            if (sb.length() != 0) {
+                sb.append(TagUtil.DELIMITER);
+            }
+
+            sb.append(id);
         }
         return sb.toString();
     }

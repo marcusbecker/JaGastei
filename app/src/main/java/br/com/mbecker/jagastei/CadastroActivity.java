@@ -22,7 +22,6 @@ import java.util.Random;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import br.com.mbecker.jagastei.adapter.CreateTag;
 import br.com.mbecker.jagastei.adapter.TextViewHelper;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
@@ -67,7 +66,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         TextViewHelper helper = new TextViewHelper(this);
         TagTextWatcher tagWatcher = new TagTextWatcher(mObs, mTagResult);
-        tagWatcher.onCreateTag((tag) -> helper.build(tag));
+        tagWatcher.setOnCreateTag((tag) -> helper.build(tag));
 
         mObs.addTextChangedListener(tagWatcher);
 
@@ -91,8 +90,9 @@ public class CadastroActivity extends AppCompatActivity {
                 GastoModel g = new GastoModel();
 
                 List<String> tags = tagWatcher.getTags();
-                if (tags.isEmpty()) {
-                    tags.add(mObs.getText().toString());
+                String obs = mObs.getText().toString().trim();
+                if (!obs.isEmpty()) {
+                    tags.add(obs);
                 }
 
                 g.setMesAno(mesAno);
