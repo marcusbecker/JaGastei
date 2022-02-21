@@ -13,6 +13,7 @@ import java.util.List;
 import br.com.mbecker.jagastei.adapter.CreateTag;
 
 public class TagTextWatcher implements TextWatcher {
+    private static final String DELIMITER = " ";
     private final List<String> tags;
     private final WeakReference<EditText> editTextWeakReference;
     private final WeakReference<LinearLayout> resultWeakReference;
@@ -36,26 +37,36 @@ public class TagTextWatcher implements TextWatcher {
     @Override
     public void afterTextChanged(Editable editable) {
         String text = editable.toString();
-        if (!text.isEmpty() && text.endsWith(" ")) {
+        if (!text.trim().isEmpty() && text.endsWith(DELIMITER)) {
             EditText editText = editTextWeakReference.get();
-            editText.removeTextChangedListener(this);
-            editText.setText("");
+            String value = text.trim();
+            if (addUniqueTag(value)) {
 
-            String value = text.toLowerCase().trim();
-            tags.add(value);
-
-            TextView tv;
-
-            if (tagCreate == null) {
-                tv = new TextView(editText.getContext());
-                tv.setText(value);
-            } else {
-                tv = (TextView) tagCreate.createTag(value);
+                TextView tv;
+                if (tagCreate == null) {
+                    tv = new TextView(editText.getContext());
+                    tv.setText(value);
+                } else {
+                    tv = (TextView) tagCreate.createTag(value);
+                }
+                resultWeakReference.get().addView(tv);
             }
 
-            resultWeakReference.get().addView(tv);
+            editText.removeTextChangedListener(this);
+            editText.setText("");
             editText.addTextChangedListener(this);
         }
+    }
+
+    private boolean addUniqueTag(String tag) {
+        for (String s : tags) {
+            if (s.equalsIgnoreCase(tag)) {
+                return false;
+            }
+        }
+
+        tags.add(tag);
+        return true;
     }
 
     public void onCreateTag(CreateTag tag) {
