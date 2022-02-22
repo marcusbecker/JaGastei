@@ -26,10 +26,10 @@ class ModelBuilder {
         return new TagModel(id, tag, gastos);
     }
 
-    public static GastoModel buildGasto(Cursor query) {
-        if (query.moveToFirst()) {
-            GastoModel v = convertGastoModel(query);
-            query.close();
+    public static GastoModel buildGasto(Cursor c) {
+        if (c.moveToFirst()) {
+            GastoModel v = convertGastoModel(c);
+            c.close();
             return v;
         }
 

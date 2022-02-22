@@ -10,7 +10,10 @@ public interface ServiceDomain {
 
     List<GastoModel> listarGastos(String mesAno);
 
+    List<GastoModel> listarGastosPorTag(long tagId);
+
     List<TagModel> listarTags();
 
     void atualizaTags(long id, List<String> tags);
+
 }

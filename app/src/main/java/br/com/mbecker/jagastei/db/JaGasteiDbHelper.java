@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -128,6 +129,30 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper implements ServiceDomain 
         }
 
         return ModelBuilder.buildGastoLista(c);
+    }
+
+    @Override
+    public List<GastoModel> listarGastosPorTag(long tagId) {
+        List<GastoModel> result = new ArrayList<>(30);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor tagCursor = db.query(JaGasteiContract.TagEntry.TABLE_NAME, new String[]{JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO}, JaGasteiContract.TagEntry._ID + "=?", new String[]{String.valueOf(tagId)}, null, null, null, "1");
+
+        if (tagCursor.moveToFirst()) {
+            String gastos = tagCursor.getString(tagCursor.getColumnIndex(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO));
+            Long[] ids = TagUtil.splitGastos(gastos);
+            for (Long id : ids) {
+                Cursor gastoCursor = db.query(JaGasteiContract.GastoEntry.TABLE_NAME, null, JaGasteiContract.GastoEntry._ID + "=?", new String[]{String.valueOf(id)}, null, null, null, "1");
+                if (gastoCursor.moveToFirst()) {
+                    GastoModel g = ModelBuilder.buildGasto(gastoCursor);
+                    result.add(g);
+                }
+                gastoCursor.close();
+            }
+        }
+
+        tagCursor.close();
+
+        return result;
     }
 
     @Override
