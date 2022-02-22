@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +60,9 @@ public class TagTextWatcher implements TextWatcher {
     }
 
     private boolean addUniqueTag(String tag) {
+        tag = tag.trim();
         for (int i = 0; i < tags.size(); ++i) {
-            if (tag.equalsIgnoreCase(tags.get(i))) {
+            if (tag.equalsIgnoreCase(tags.get(i)) || cleanTag(tag).equalsIgnoreCase(cleanTag(tags.get(i)))) {
                 tags.set(i, tag);
                 return false;
             }
@@ -68,6 +70,10 @@ public class TagTextWatcher implements TextWatcher {
 
         tags.add(tag);
         return true;
+    }
+
+    private String cleanTag(String str) {
+        return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
     public void setOnCreateTag(CreateTag tag) {

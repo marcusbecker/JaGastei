@@ -37,6 +37,7 @@
     <string name="notfication_msg_a">Gasto total el mes pasado:&#160;</string>
     <string name="notfication_msg_b">Total gastado hasta ahora:&#160;</string>
     <string name="notfication_title">Gastando hasta ahora</string>
-
+    <string name="line">_ _ _</string>
+    <string name="tag_filter">Filtrar por tag:</string>
 
 </resources>
