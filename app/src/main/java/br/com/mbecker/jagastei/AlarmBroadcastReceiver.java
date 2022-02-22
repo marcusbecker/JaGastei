@@ -14,7 +14,7 @@ import java.util.List;
 
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.domain.Domain;
-import br.com.mbecker.jagastei.domain.Service;
+import br.com.mbecker.jagastei.domain.ServiceDomain;
 import br.com.mbecker.jagastei.util.Util;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
@@ -30,7 +30,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         int mes = c.get(Calendar.MONTH);
 
         if (dia == 1 || dia == 16) {
-            Service service = Domain.getService(context);
+            ServiceDomain service = Domain.getService(context);
 
             String texto;
             if (dia == 1) {

@@ -10,11 +10,11 @@ import java.util.List;
 
 import br.com.mbecker.jagastei.db.TagModel;
 import br.com.mbecker.jagastei.domain.Domain;
-import br.com.mbecker.jagastei.domain.Service;
+import br.com.mbecker.jagastei.domain.ServiceDomain;
 
 public class TagActivity extends AppCompatActivity {
 
-    private Service service;
+    private ServiceDomain service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

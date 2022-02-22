@@ -33,7 +33,7 @@ import java.util.Locale;
 import br.com.mbecker.jagastei.adapter.GastoAdapter;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.domain.Domain;
-import br.com.mbecker.jagastei.domain.Service;
+import br.com.mbecker.jagastei.domain.ServiceDomain;
 import br.com.mbecker.jagastei.util.Util;
 
 public class MainActivity extends AppCompatActivity {
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("WeakerAccess")
     public static class ExtratoMesFragment extends Fragment {
         private short mes;
-        private Service service;
+        private ServiceDomain service;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

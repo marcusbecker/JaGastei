@@ -5,7 +5,7 @@ import java.util.List;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.db.TagModel;
 
-public interface Service {
+public interface ServiceDomain {
     long salvarGasto(GastoModel g);
 
     List<GastoModel> listarGastos(String mesAno);

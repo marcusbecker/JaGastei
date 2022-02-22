@@ -13,12 +13,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.jar.JarEntry;
 
-import br.com.mbecker.jagastei.domain.Service;
+import br.com.mbecker.jagastei.domain.ServiceDomain;
 import br.com.mbecker.jagastei.util.TagUtil;
 
-public class JaGasteiDbHelper extends SQLiteOpenHelper implements Service {
+public class JaGasteiDbHelper extends SQLiteOpenHelper implements ServiceDomain {
 
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "JaGastei.db";

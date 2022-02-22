@@ -25,7 +25,7 @@ import java.util.Random;
 import br.com.mbecker.jagastei.adapter.TextViewHelper;
 import br.com.mbecker.jagastei.db.GastoModel;
 import br.com.mbecker.jagastei.domain.Domain;
-import br.com.mbecker.jagastei.domain.Service;
+import br.com.mbecker.jagastei.domain.ServiceDomain;
 import br.com.mbecker.jagastei.util.MoneyTextWatcher;
 import br.com.mbecker.jagastei.util.TagTextWatcher;
 import br.com.mbecker.jagastei.util.TagUtil;
@@ -37,7 +37,7 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText mValor;
     private EditText mObs;
     private LinearLayout mTagResult;
-    private Service service;
+    private ServiceDomain service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
