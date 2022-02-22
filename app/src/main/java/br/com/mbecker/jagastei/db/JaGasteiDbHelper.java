@@ -15,9 +15,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 
+import br.com.mbecker.jagastei.domain.Service;
 import br.com.mbecker.jagastei.util.TagUtil;
 
-public class JaGasteiDbHelper extends SQLiteOpenHelper {
+public class JaGasteiDbHelper extends SQLiteOpenHelper implements Service {
 
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "JaGastei.db";
@@ -94,6 +95,7 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
     }
 
 
+    @Override
     public long salvarGasto(GastoModel g) {
         long id = 0;
 
@@ -116,6 +118,7 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    @Override
     public List<GastoModel> listarGastos(String mesAno) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c;
@@ -128,12 +131,14 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
         return ModelBuilder.buildGastoLista(c);
     }
 
+    @Override
     public List<TagModel> listarTags() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.query(JaGasteiContract.TagEntry.TABLE_NAME, null, null, null, null, null, null);
         return ModelBuilder.buildTagLista(c);
     }
 
+    @Override
     public void atualizaTags(long id, List<String> tags) {
         Cursor c;
         SQLiteDatabase db = getWritableDatabase();
@@ -145,6 +150,7 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
                 newTags.add(id);
                 if (newTags.size() > tagModel.getGastos().length) {
                     ContentValues cv = new ContentValues();
+                    cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_TAG_NAME, t);
                     cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO, TagUtil.tagsGastosToString(newTags));
                     db.update(JaGasteiContract.TagEntry.TABLE_NAME, cv, JaGasteiContract.TagEntry._ID + "=?", new String[]{String.valueOf(tagModel.getId())});
                 }

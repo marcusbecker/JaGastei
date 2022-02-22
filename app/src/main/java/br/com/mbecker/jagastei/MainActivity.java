@@ -5,8 +5,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,22 +23,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import br.com.mbecker.jagastei.adapter.GastoAdapter;
-import br.com.mbecker.jagastei.db.GastoModel;
-import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
-import br.com.mbecker.jagastei.util.Util;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import br.com.mbecker.jagastei.adapter.GastoAdapter;
+import br.com.mbecker.jagastei.db.GastoModel;
+import br.com.mbecker.jagastei.domain.Domain;
+import br.com.mbecker.jagastei.domain.Service;
+import br.com.mbecker.jagastei.util.Util;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -119,13 +119,13 @@ public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("WeakerAccess")
     public static class ExtratoMesFragment extends Fragment {
         private short mes;
-        private JaGasteiDbHelper db;
+        private Service service;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             if (getArguments() != null) {
-                db = new JaGasteiDbHelper(getContext());
+                service = Domain.getService(getContext());
                 mes = getArguments().getShort(ARG_PARAM_MES_SEL);
             }
         }
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             String mesAno = Util.mesAno(c);
-            List<GastoModel> lst = db.listarGastos(mesAno);
+            List<GastoModel> lst = service.listarGastos(mesAno);
 
             TextView mes = view.findViewById(R.id.tvMes);
             TextView total = view.findViewById(R.id.tvTotal);

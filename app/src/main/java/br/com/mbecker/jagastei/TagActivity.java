@@ -1,32 +1,30 @@
 package br.com.mbecker.jagastei;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import androidx.appcompat.app.AppCompatActivity;
 
-import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
+import java.util.List;
+
 import br.com.mbecker.jagastei.db.TagModel;
+import br.com.mbecker.jagastei.domain.Domain;
+import br.com.mbecker.jagastei.domain.Service;
 
 public class TagActivity extends AppCompatActivity {
 
-    private JaGasteiDbHelper db;
+    private Service service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag);
 
-        db = new JaGasteiDbHelper(TagActivity.this);
+        service = Domain.getService(TagActivity.this);
         Spinner spinner = (Spinner) findViewById(R.id.spTag);
 
-        List<TagModel> tags = db.listarTags();
+        List<TagModel> tags = service.listarTags();
         String[] items = tags.stream().map(t -> t.getTag()).toArray(String[]::new);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);

@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import java.math.BigDecimal;
@@ -19,12 +22,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import br.com.mbecker.jagastei.adapter.TextViewHelper;
 import br.com.mbecker.jagastei.db.GastoModel;
-import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
+import br.com.mbecker.jagastei.domain.Domain;
+import br.com.mbecker.jagastei.domain.Service;
 import br.com.mbecker.jagastei.util.MoneyTextWatcher;
 import br.com.mbecker.jagastei.util.TagTextWatcher;
 import br.com.mbecker.jagastei.util.TagUtil;
@@ -36,7 +37,7 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText mValor;
     private EditText mObs;
     private LinearLayout mTagResult;
-    private JaGasteiDbHelper db;
+    private Service service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class CadastroActivity extends AppCompatActivity {
             aviso.setVisibility(View.INVISIBLE);
         }
 
-        db = new JaGasteiDbHelper(CadastroActivity.this);
+        service = Domain.getService(CadastroActivity.this);
 
         //List<TagModel> tagModels = db.listarTags();
 
@@ -103,8 +104,8 @@ public class CadastroActivity extends AppCompatActivity {
                 mObs.setText("");
                 mValor.setText("");
 
-                long id = db.salvarGasto(g);
-                db.atualizaTags(id, tags);
+                long id = service.salvarGasto(g);
+                service.atualizaTags(id, tags);
                 carregarLista();
             }
         });

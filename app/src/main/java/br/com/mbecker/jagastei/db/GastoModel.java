@@ -1,9 +1,9 @@
 package br.com.mbecker.jagastei.db;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
 
 public class GastoModel {
     private long id;
