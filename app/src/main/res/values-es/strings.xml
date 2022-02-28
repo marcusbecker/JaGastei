@@ -3,7 +3,7 @@
     <string name="action_settings">Configurar</string>
     <string name="btn_gastar">Gastar :(</string>
     <string name="hint_valor">0,00 \u20ac</string>
-    <string name="hint_nota">#Nota</string>
+    <string name="hint_nota">Use tag digitando a frase e depois espaço</string>
     <string name="tv_mes">Este mes</string>
     <string-array name="avisos_array">
         <item>Podría haber salvado ...</item>
