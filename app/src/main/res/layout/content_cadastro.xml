@@ -44,7 +44,16 @@
         android:layout_marginTop="10dp"
         android:hint="@string/hint_nota"
         android:inputType="text"
-        android:maxLength="8" />
+        android:maxLength="16" />
+
+
+    <LinearLayout
+        android:id="@+id/llTags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etObs"
+        android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="10dp" />
 
 
     <Button
@@ -53,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorAccent"
-        android:textColor="@color/colorAccentText"
-        android:text="@string/btn_gastar" />
+        android:text="@string/btn_gastar"
+        android:textColor="@color/colorAccentText" />
 
 </RelativeLayout>

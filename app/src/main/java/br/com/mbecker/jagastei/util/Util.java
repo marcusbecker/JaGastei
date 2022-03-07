@@ -1,8 +1,11 @@
-package br.com.mbecker.jagastei;
+package br.com.mbecker.jagastei.util;
+
+import android.util.Log;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

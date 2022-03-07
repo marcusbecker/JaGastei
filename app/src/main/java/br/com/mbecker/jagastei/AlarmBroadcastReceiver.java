@@ -5,15 +5,17 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Calendar;
 import java.util.List;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import br.com.mbecker.jagastei.db.GastoModel;
-import br.com.mbecker.jagastei.db.JaGasteiDbHelper;
+import br.com.mbecker.jagastei.domain.Domain;
+import br.com.mbecker.jagastei.domain.ServiceDomain;
+import br.com.mbecker.jagastei.util.Util;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
@@ -28,7 +30,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         int mes = c.get(Calendar.MONTH);
 
         if (dia == 1 || dia == 16) {
-            JaGasteiDbHelper db = new JaGasteiDbHelper(context);
+            ServiceDomain service = Domain.getService(context);
 
             String texto;
             if (dia == 1) {
@@ -39,8 +41,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             }
 
             String mesAno = Util.mesAno(c);
-            List<GastoModel> lista = db.listarGastos(mesAno);
-            db.close();
+            List<GastoModel> lista = service.listarGastos(mesAno);
 
             if (lista.isEmpty()) {
                 return;

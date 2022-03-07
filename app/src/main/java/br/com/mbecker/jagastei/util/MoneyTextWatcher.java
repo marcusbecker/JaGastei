@@ -8,8 +8,6 @@ import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 
-import br.com.mbecker.jagastei.Util;
-
 public class MoneyTextWatcher implements TextWatcher {
     private final WeakReference<EditText> editTextWeakReference;
     private final NumberFormat nf;

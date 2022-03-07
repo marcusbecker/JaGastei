@@ -4,7 +4,7 @@
     <string name="action_settings">Configurar</string>
     <string name="btn_gastar">Gastar :(</string>
     <string name="hint_valor">R$ 0,00</string>
-    <string name="hint_nota">#Nota</string>
+    <string name="hint_nota">Use tag digitando a frase e depois espaço</string>
     <string name="tv_mes">Este mês</string>
     <string-array name="avisos_array">
         <item>Poderia ter guardado...</item>
@@ -12,6 +12,7 @@
         <item>Custo benefício muito baixo...</item>
         <item>Até investir na poupança teria sido melhor...</item>
         <item>Já ouviu falar em Tesouro Direto?</item>
+        <item>Cada vez mais longe seu PS5</item>
     </string-array>
     <string-array name="meses_array">
         <item>Janeiro</item>
@@ -38,5 +39,7 @@
     <string name="notfication_msg_a">Total gasto do mês passado:&#160;</string>
     <string name="notfication_msg_b">Total gasto até agora:&#160;</string>
     <string name="notfication_title">Gastos até agora</string>
+    <string name="line">_ _ _</string>
+    <string name="tag_filter">Filtrar por tag:</string>
 
 </resources>

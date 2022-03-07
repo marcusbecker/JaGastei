@@ -7,11 +7,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public class JaGasteiDbHelper extends SQLiteOpenHelper {
+import br.com.mbecker.jagastei.domain.ServiceDomain;
+import br.com.mbecker.jagastei.util.TagUtil;
 
-    private static final int DATABASE_VERSION = 1;
+public class JaGasteiDbHelper extends SQLiteOpenHelper implements ServiceDomain {
+
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "JaGastei.db";
 
     public JaGasteiDbHelper(Context context) {
@@ -20,18 +29,75 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(JaGasteiContract.SQL_CREATE_GASTO);
+        db.execSQL(JaGasteiContract.SQL_CREATE_TAG);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(JaGasteiContract.SQL_DELETE_GASTO);
-        onCreate(db);
+
+        switch (newVersion) {
+            case 2:
+                db.execSQL(JaGasteiContract.SQL_CREATE_TAG);
+                migrarVersao2(db);
+                break;
+        }
+
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        onUpgrade(db, oldVersion, newVersion);
+        switch (oldVersion) {
+            case 1:
+                db.execSQL(JaGasteiContract.SQL_DELETE_GASTO);
+                break;
+            case 2:
+                db.execSQL(JaGasteiContract.SQL_DELETE_TAG);
+                break;
+        }
+
     }
 
-    public void salvarGasto(GastoModel g) {
+    private void migrarVersao2(SQLiteDatabase db) {
+        Cursor c = db.query(JaGasteiContract.GastoEntry.TABLE_NAME, new String[]{JaGasteiContract.GastoEntry._ID, JaGasteiContract.GastoEntry.COLUMN_NAME_OBS}, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            Map<String, String> mapTags = new HashMap<>(20);
+            do {
+                long id = c.getLong(c.getColumnIndex(JaGasteiContract.GastoEntry._ID));
+                String obs = c.getString(c.getColumnIndex(JaGasteiContract.GastoEntry.COLUMN_NAME_OBS));
+
+                if (obs == null || obs.trim().isEmpty()) {
+                    continue;
+                }
+
+                obs = obs.replaceAll(";", ",").replaceAll(" ", ";").toLowerCase();
+                ContentValues cv = new ContentValues();
+                cv.put(JaGasteiContract.GastoEntry.COLUMN_NAME_OBS, obs);
+                db.update(JaGasteiContract.GastoEntry.TABLE_NAME, cv, "_id = ?", new String[]{String.valueOf(id)});
+
+                String[] tags = obs.split(";");
+                for (String t : tags) {
+                    String idTags = mapTags.get(t);
+                    if (idTags != null) {
+                        idTags += ";" + id;
+                    } else {
+                        idTags = String.valueOf(id);
+                    }
+                    mapTags.put(t, idTags);
+                }
+            } while (c.moveToNext());
+            c.close();
+
+            mapTags.forEach((k, v) -> {
+                ContentValues cv = new ContentValues();
+                cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_TAG_NAME, k);
+                cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO, v);
+                db.insert(JaGasteiContract.TagEntry.TABLE_NAME, null, cv);
+            });
+        }
+    }
+
+
+    @Override
+    public long salvarGasto(GastoModel g) {
+        long id = 0;
 
         try (SQLiteDatabase db = getWritableDatabase()) {
             ContentValues values = new ContentValues();
@@ -43,13 +109,16 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
             values.put(JaGasteiContract.GastoEntry.COLUMN_NAME_LNG, g.getLng());
             values.put(JaGasteiContract.GastoEntry.COLUMN_NAME_OBS, g.getObs());
 
-            db.insert(JaGasteiContract.GastoEntry.TABLE_NAME, null, values);
+            id = db.insert(JaGasteiContract.GastoEntry.TABLE_NAME, null, values);
 
         } catch (Exception e) {
             Log.d(getClass().getName(), "salvarGasto: " + e.getMessage());
         }
+
+        return id;
     }
 
+    @Override
     public List<GastoModel> listarGastos(String mesAno) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c;
@@ -60,6 +129,66 @@ public class JaGasteiDbHelper extends SQLiteOpenHelper {
         }
 
         return ModelBuilder.buildGastoLista(c);
+    }
+
+    @Override
+    public List<GastoModel> listarGastosPorTag(long tagId) {
+        List<GastoModel> result = new ArrayList<>(30);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor tagCursor = db.query(JaGasteiContract.TagEntry.TABLE_NAME, new String[]{JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO}, JaGasteiContract.TagEntry._ID + "=?", new String[]{String.valueOf(tagId)}, null, null, null, "1");
+
+        if (tagCursor.moveToFirst()) {
+            String gastos = tagCursor.getString(tagCursor.getColumnIndex(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO));
+            Long[] ids = TagUtil.splitGastos(gastos);
+            for (Long id : ids) {
+                Cursor gastoCursor = db.query(JaGasteiContract.GastoEntry.TABLE_NAME, null, JaGasteiContract.GastoEntry._ID + "=?", new String[]{String.valueOf(id)}, null, null, null, "1");
+                if (gastoCursor.moveToFirst()) {
+                    GastoModel g = ModelBuilder.buildGasto(gastoCursor);
+                    result.add(g);
+                }
+                gastoCursor.close();
+            }
+        }
+
+        tagCursor.close();
+
+        return result;
+    }
+
+    @Override
+    public List<TagModel> listarTags() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.query(JaGasteiContract.TagEntry.TABLE_NAME, null, null, null, null, null, null);
+        return ModelBuilder.buildTagLista(c);
+    }
+
+    @Override
+    public void atualizaTags(long id, List<String> tags) {
+        Cursor c;
+        SQLiteDatabase db = getWritableDatabase();
+        for (String t : tags) {
+            c = db.query(JaGasteiContract.TagEntry.TABLE_NAME, null, JaGasteiContract.TagEntry.COLUMN_NAME_TAG_NAME + "=?", new String[]{t}, null, null, null, "1");
+            if (c.moveToFirst()) {
+                TagModel tagModel = ModelBuilder.buildTag(c);
+                Set<Long> newTags = new HashSet<>(Arrays.asList(tagModel.getGastos()));
+                newTags.add(id);
+                if (newTags.size() > tagModel.getGastos().length) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_TAG_NAME, t);
+                    cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO, TagUtil.tagsGastosToString(newTags));
+                    db.update(JaGasteiContract.TagEntry.TABLE_NAME, cv, JaGasteiContract.TagEntry._ID + "=?", new String[]{String.valueOf(tagModel.getId())});
+                }
+
+                c.close();
+
+            } else {
+                ContentValues cv = new ContentValues();
+                cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_TAG_NAME, t);
+                cv.put(JaGasteiContract.TagEntry.COLUMN_NAME_ID_GASTO, String.valueOf(id));
+                db.insert(JaGasteiContract.TagEntry.TABLE_NAME, null, cv);
+            }
+
+        }
     }
 
     /*
