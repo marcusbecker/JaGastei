@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    compileSdk 28
+    compileSdk 33
 
     defaultConfig {
         applicationId "br.com.mbecker.jagastei"
         minSdk 25
-        targetSdk 30
-        versionCode 4
-        versionName "1.4"
+        targetSdk 33
+        versionCode 5
+        versionName "1.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,6 +25,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'br.com.mbecker.jagastei'
 }
 
 dependencies {
