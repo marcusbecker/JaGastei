@@ -66,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
 
         final Intent alrmIntent = new Intent(context, AlarmBroadcastReceiver.class);
-        boolean noAlarm = PendingIntent.getBroadcast(MainActivity.this, AlarmBroadcastReceiver.REQUEST_CODE, alrmIntent, PendingIntent.FLAG_NO_CREATE) == null;
+        boolean noAlarm = PendingIntent.getBroadcast(MainActivity.this, AlarmBroadcastReceiver.REQUEST_CODE, alrmIntent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE) == null;
         if (noAlarm) {
             AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, AlarmBroadcastReceiver.REQUEST_CODE, alrmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, AlarmBroadcastReceiver.REQUEST_CODE, alrmIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(System.currentTimeMillis());
             c.set(Calendar.HOUR_OF_DAY, 9);

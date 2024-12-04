@@ -26,6 +26,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'br.com.mbecker.jagastei'
+    packaging {
+        jniLibs {
+            useLegacyPackaging false
+        }
+    }
 }
 
 dependencies {
